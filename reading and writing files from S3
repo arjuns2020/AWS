@@ -1,0 +1,23 @@
+# NOTE: Specify your bucket
+s3_bucket_name = 'demo-ml-sagemaker1'
+
+reading and writing files from S3
+
+# files are referred as objects in S3 
+# file name is referred as key name in S3
+# Files stored in S3 are automatically replicated across 3 different availability zones 
+# in the region where the bucket was created.
+
+# http://boto3.readthedocs.io/en/latest/guide/s3.html
+def write_to_s3(filename, bucket, key):
+    with open(filename,'rb') as f: # Read in binary mode
+        return boto3.Session().resource('s3').Bucket(bucket).Object(key).upload_fileobj(f)
+		
+write_to_s3('demo_file.csv', s3_bucket_name, 'data_format/demo_file.csv')		
+		
+# http://boto3.readthedocs.io/en/latest/guide/s3.html
+def download_from_s3(filename, bucket, key):
+    with open(filename,'wb') as f:
+        return boto3.Session().resource('s3').Bucket(bucket).Object(key).download_fileobj(f)
+		
+download_from_s3('demo_file_from_s3.csv',s3_bucket_name,'data_format/demo_file.csv')
